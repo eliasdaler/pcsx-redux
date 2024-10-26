@@ -26,8 +26,6 @@ SOFTWARE.
 
 #include "psyqo/soft-math.hh"
 
-#define COLUMN_MAJOR
-
 using namespace psyqo::fixed_point_literals;
 using namespace psyqo::trig_literals;
 
@@ -250,15 +248,15 @@ void psyqo::SoftMath::multiplyMatrix33(const Matrix33 &m1, const Matrix33 &m2, M
     out->vs[2].y = m23;
     out->vs[2].z = m33;
 #else
-    auto x0 = m1.vs[0].x * m2.vs[0].x + m1.vs[1].x * m2.vs[0].y + m1.vs[2].x * m2.vs[0].z;
-    auto y0 = m1.vs[0].y * m2.vs[0].x + m1.vs[1].y * m2.vs[0].y + m1.vs[2].y * m2.vs[0].z;
-    auto z0 = m1.vs[0].z * m2.vs[0].x + m1.vs[1].z * m2.vs[0].y + m1.vs[2].z * m2.vs[0].z;
-    auto x1 = m1.vs[0].x * m2.vs[1].x + m1.vs[1].x * m2.vs[1].y + m1.vs[2].x * m2.vs[1].z;
-    auto y1 = m1.vs[0].y * m2.vs[1].x + m1.vs[1].y * m2.vs[1].y + m1.vs[2].y * m2.vs[1].z;
-    auto z1 = m1.vs[0].z * m2.vs[1].x + m1.vs[1].z * m2.vs[1].y + m1.vs[2].z * m2.vs[1].z;
-    auto x2 = m1.vs[0].x * m2.vs[2].x + m1.vs[1].x * m2.vs[2].y + m1.vs[2].x * m2.vs[2].z;
-    auto y2 = m1.vs[0].y * m2.vs[2].x + m1.vs[1].y * m2.vs[2].y + m1.vs[2].y * m2.vs[2].z;
-    auto z2 = m1.vs[0].z * m2.vs[2].x + m1.vs[1].z * m2.vs[2].y + m1.vs[2].z * m2.vs[2].z;
+    auto x0 = m2.vs[0].x * m1.vs[0].x + m2.vs[1].x * m1.vs[0].y + m2.vs[2].x * m1.vs[0].z;
+    auto y0 = m2.vs[0].y * m1.vs[0].x + m2.vs[1].y * m1.vs[0].y + m2.vs[2].y * m1.vs[0].z;
+    auto z0 = m2.vs[0].z * m1.vs[0].x + m2.vs[1].z * m1.vs[0].y + m2.vs[2].z * m1.vs[0].z;
+    auto x1 = m2.vs[0].x * m1.vs[1].x + m2.vs[1].x * m1.vs[1].y + m2.vs[2].x * m1.vs[1].z;
+    auto y1 = m2.vs[0].y * m1.vs[1].x + m2.vs[1].y * m1.vs[1].y + m2.vs[2].y * m1.vs[1].z;
+    auto z1 = m2.vs[0].z * m1.vs[1].x + m2.vs[1].z * m1.vs[1].y + m2.vs[2].z * m1.vs[1].z;
+    auto x2 = m2.vs[0].x * m1.vs[2].x + m2.vs[1].x * m1.vs[2].y + m2.vs[2].x * m1.vs[2].z;
+    auto y2 = m2.vs[0].y * m1.vs[2].x + m2.vs[1].y * m1.vs[2].y + m2.vs[2].y * m1.vs[2].z;
+    auto z2 = m2.vs[0].z * m1.vs[2].x + m2.vs[1].z * m1.vs[2].y + m2.vs[2].z * m1.vs[2].z;
 
     out->vs[0].x = x0;
     out->vs[0].y = y0;
@@ -286,15 +284,15 @@ psyqo::Matrix33 psyqo::SoftMath::multiplyMatrix33(const Matrix33 &m1, const Matr
 
     return Matrix33{{{.x = m11, .y = m21, .z = m31}, {.x = m12, .y = m22, .z = m32}, {.x = m13, .y = m23, .z = m33}}};
 #else
-    auto x0 = m1.vs[0].x * m2.vs[0].x + m1.vs[1].x * m2.vs[0].y + m1.vs[2].x * m2.vs[0].z;
-    auto y0 = m1.vs[0].y * m2.vs[0].x + m1.vs[1].y * m2.vs[0].y + m1.vs[2].y * m2.vs[0].z;
-    auto z0 = m1.vs[0].z * m2.vs[0].x + m1.vs[1].z * m2.vs[0].y + m1.vs[2].z * m2.vs[0].z;
-    auto x1 = m1.vs[0].x * m2.vs[1].x + m1.vs[1].x * m2.vs[1].y + m1.vs[2].x * m2.vs[1].z;
-    auto y1 = m1.vs[0].y * m2.vs[1].x + m1.vs[1].y * m2.vs[1].y + m1.vs[2].y * m2.vs[1].z;
-    auto z1 = m1.vs[0].z * m2.vs[1].x + m1.vs[1].z * m2.vs[1].y + m1.vs[2].z * m2.vs[1].z;
-    auto x2 = m1.vs[0].x * m2.vs[2].x + m1.vs[1].x * m2.vs[2].y + m1.vs[2].x * m2.vs[2].z;
-    auto y2 = m1.vs[0].y * m2.vs[2].x + m1.vs[1].y * m2.vs[2].y + m1.vs[2].y * m2.vs[2].z;
-    auto z2 = m1.vs[0].z * m2.vs[2].x + m1.vs[1].z * m2.vs[2].y + m1.vs[2].z * m2.vs[2].z;
+    auto x0 = m2.vs[0].x * m1.vs[0].x + m2.vs[1].x * m1.vs[0].y + m2.vs[2].x * m1.vs[0].z;
+    auto y0 = m2.vs[0].y * m1.vs[0].x + m2.vs[1].y * m1.vs[0].y + m2.vs[2].y * m1.vs[0].z;
+    auto z0 = m2.vs[0].z * m1.vs[0].x + m2.vs[1].z * m1.vs[0].y + m2.vs[2].z * m1.vs[0].z;
+    auto x1 = m2.vs[0].x * m1.vs[1].x + m2.vs[1].x * m1.vs[1].y + m2.vs[2].x * m1.vs[1].z;
+    auto y1 = m2.vs[0].y * m1.vs[1].x + m2.vs[1].y * m1.vs[1].y + m2.vs[2].y * m1.vs[1].z;
+    auto z1 = m2.vs[0].z * m1.vs[1].x + m2.vs[1].z * m1.vs[1].y + m2.vs[2].z * m1.vs[1].z;
+    auto x2 = m2.vs[0].x * m1.vs[2].x + m2.vs[1].x * m1.vs[2].y + m2.vs[2].x * m1.vs[2].z;
+    auto y2 = m2.vs[0].y * m1.vs[2].x + m2.vs[1].y * m1.vs[2].y + m2.vs[2].y * m1.vs[2].z;
+    auto z2 = m2.vs[0].z * m1.vs[2].x + m2.vs[1].z * m1.vs[2].y + m2.vs[2].z * m1.vs[2].z;
 
     return Matrix33{{{.x = x0, .y = y0, .z = z0}, {.x = x1, .y = y1, .z = z1}, {.x = x2, .y = y2, .z = z2}}};
 #endif

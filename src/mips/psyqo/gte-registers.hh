@@ -797,7 +797,6 @@ inline void writeUnsafe<Register::ZSF4>(Short z_) {
 
 template <>
 inline void writeSafe<PseudoRegister::Rotation>(const Matrix33& in) {
-#define COLUMN_MAJOR
 #ifdef COLUMN_MAJOR
     writeUnsafe<Register::R11R12>(Short(in.vs[0].x), Short(in.vs[1].x));
     writeUnsafe<Register::R13R21>(Short(in.vs[2].x), Short(in.vs[0].y));
@@ -864,7 +863,6 @@ inline void writeSafe<PseudoRegister::ScreenOffset>(const Vec2& in) {
 
 template <>
 inline void writeUnsafe<PseudoRegister::Rotation>(const Matrix33& in) {
-#define COLUMN_MAJOR
 #ifdef COLUMN_MAJOR
     writeUnsafe<Register::R11R12>(Short(in.vs[0].x), Short(in.vs[1].x));
     writeUnsafe<Register::R13R21>(Short(in.vs[2].x), Short(in.vs[0].y));
