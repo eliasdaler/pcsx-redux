@@ -30,45 +30,6 @@ using namespace psyqo::fixed_point_literals;
 using namespace psyqo::trig_literals;
 
 void psyqo::SoftMath::generateRotationMatrix33(Matrix33 *m, Angle t, Axis a, const Trig<> &trig) {
-#ifdef COLUMN_MAJOR
-    auto s = trig.sin(t);
-    auto c = trig.cos(t);
-    switch (a) {
-        case Axis::X:
-            m->vs[0].x = 1.0_fp;
-            m->vs[0].y = 0.0_fp;
-            m->vs[0].z = 0.0_fp;
-            m->vs[1].x = 0.0_fp;
-            m->vs[1].y = c;
-            m->vs[1].z = -s;
-            m->vs[2].x = 0.0_fp;
-            m->vs[2].y = s;
-            m->vs[2].z = c;
-            break;
-        case Axis::Y:
-            m->vs[0].x = c;
-            m->vs[0].y = 0.0_fp;
-            m->vs[0].z = s;
-            m->vs[1].x = 0.0_fp;
-            m->vs[1].y = 1.0_fp;
-            m->vs[1].z = 0.0_fp;
-            m->vs[2].x = -s;
-            m->vs[2].y = 0.0_fp;
-            m->vs[2].z = c;
-            break;
-        case Axis::Z:
-            m->vs[0].x = c;
-            m->vs[0].y = -s;
-            m->vs[0].z = 0.0_fp;
-            m->vs[1].x = s;
-            m->vs[1].y = c;
-            m->vs[1].z = 0.0_fp;
-            m->vs[2].x = 0.0_fp;
-            m->vs[2].y = 0.0_fp;
-            m->vs[2].z = 1.0_fp;
-            break;
-    }
-#else
     auto s = trig.sin(t);
     auto c = trig.cos(t);
     switch (a) {
@@ -106,67 +67,9 @@ void psyqo::SoftMath::generateRotationMatrix33(Matrix33 *m, Angle t, Axis a, con
             m->vs[2].z = 1.0_fp;
             break;
     }
-#endif
 }
 
 psyqo::Matrix33 psyqo::SoftMath::generateRotationMatrix33(Angle t, Axis a, const Trig<> &trig) {
-#ifdef COLUMN_MAJOR
-    auto s = trig.sin(t);
-    auto c = trig.cos(t);
-    switch (a) {
-        case Axis::X: {
-            return Matrix33{{{
-                                 .x = 1.0_fp,
-                                 .y = 0.0_fp,
-                                 .z = 0.0_fp,
-                             },
-                             {
-                                 .x = 0.0_fp,
-                                 .y = c,
-                                 .z = -s,
-                             },
-                             {
-                                 .x = 0.0_fp,
-                                 .y = s,
-                                 .z = c,
-                             }}};
-        } break;
-        case Axis::Y: {
-            return Matrix33{{{
-                                 .x = c,
-                                 .y = 0.0_fp,
-                                 .z = s,
-                             },
-                             {
-                                 .x = 0.0_fp,
-                                 .y = 1.0_fp,
-                                 .z = 0.0_fp,
-                             },
-                             {
-                                 .x = -s,
-                                 .y = 0.0_fp,
-                                 .z = c,
-                             }}};
-        } break;
-        case Axis::Z: {
-            return Matrix33{{{
-                                 .x = c,
-                                 .y = -s,
-                                 .z = 0.0_fp,
-                             },
-                             {
-                                 .x = s,
-                                 .y = c,
-                                 .z = 0.0_fp,
-                             },
-                             {
-                                 .x = 0.0_fp,
-                                 .y = 0.0_fp,
-                                 .z = 1.0_fp,
-                             }}};
-        } break;
-    }
-#else
     auto s = trig.sin(t);
     auto c = trig.cos(t);
     switch (a) {
@@ -222,32 +125,10 @@ psyqo::Matrix33 psyqo::SoftMath::generateRotationMatrix33(Angle t, Axis a, const
                              }}};
         } break;
     }
-#endif
     __builtin_unreachable();
 }
 
 void psyqo::SoftMath::multiplyMatrix33(const Matrix33 &m1, const Matrix33 &m2, Matrix33 *out) {
-#ifdef COLUMN_MAJOR
-    auto m11 = m1.vs[0].x * m2.vs[0].x + m1.vs[1].x * m2.vs[0].y + m1.vs[2].x * m2.vs[0].z;
-    auto m12 = m1.vs[0].x * m2.vs[1].x + m1.vs[1].x * m2.vs[1].y + m1.vs[2].x * m2.vs[1].z;
-    auto m13 = m1.vs[0].x * m2.vs[2].x + m1.vs[1].x * m2.vs[2].y + m1.vs[2].x * m2.vs[2].z;
-    auto m21 = m1.vs[0].y * m2.vs[0].x + m1.vs[1].y * m2.vs[0].y + m1.vs[2].y * m2.vs[0].z;
-    auto m22 = m1.vs[0].y * m2.vs[1].x + m1.vs[1].y * m2.vs[1].y + m1.vs[2].y * m2.vs[1].z;
-    auto m23 = m1.vs[0].y * m2.vs[2].x + m1.vs[1].y * m2.vs[2].y + m1.vs[2].y * m2.vs[2].z;
-    auto m31 = m1.vs[0].z * m2.vs[0].x + m1.vs[1].z * m2.vs[0].y + m1.vs[2].z * m2.vs[0].z;
-    auto m32 = m1.vs[0].z * m2.vs[1].x + m1.vs[1].z * m2.vs[1].y + m1.vs[2].z * m2.vs[1].z;
-    auto m33 = m1.vs[0].z * m2.vs[2].x + m1.vs[1].z * m2.vs[2].y + m1.vs[2].z * m2.vs[2].z;
-
-    out->vs[0].x = m11;
-    out->vs[0].y = m21;
-    out->vs[0].z = m31;
-    out->vs[1].x = m12;
-    out->vs[1].y = m22;
-    out->vs[1].z = m32;
-    out->vs[2].x = m13;
-    out->vs[2].y = m23;
-    out->vs[2].z = m33;
-#else
     auto x0 = m2.vs[0].x * m1.vs[0].x + m2.vs[1].x * m1.vs[0].y + m2.vs[2].x * m1.vs[0].z;
     auto y0 = m2.vs[0].y * m1.vs[0].x + m2.vs[1].y * m1.vs[0].y + m2.vs[2].y * m1.vs[0].z;
     auto z0 = m2.vs[0].z * m1.vs[0].x + m2.vs[1].z * m1.vs[0].y + m2.vs[2].z * m1.vs[0].z;
@@ -267,23 +148,9 @@ void psyqo::SoftMath::multiplyMatrix33(const Matrix33 &m1, const Matrix33 &m2, M
     out->vs[2].x = x2;
     out->vs[2].y = y2;
     out->vs[2].z = z2;
-#endif
 }
 
 psyqo::Matrix33 psyqo::SoftMath::multiplyMatrix33(const Matrix33 &m1, const Matrix33 &m2) {
-#ifdef COLUMN_MAJOR
-    auto m11 = m1.vs[0].x * m2.vs[0].x + m1.vs[1].x * m2.vs[0].y + m1.vs[2].x * m2.vs[0].z;
-    auto m12 = m1.vs[0].x * m2.vs[1].x + m1.vs[1].x * m2.vs[1].y + m1.vs[2].x * m2.vs[1].z;
-    auto m13 = m1.vs[0].x * m2.vs[2].x + m1.vs[1].x * m2.vs[2].y + m1.vs[2].x * m2.vs[2].z;
-    auto m21 = m1.vs[0].y * m2.vs[0].x + m1.vs[1].y * m2.vs[0].y + m1.vs[2].y * m2.vs[0].z;
-    auto m22 = m1.vs[0].y * m2.vs[1].x + m1.vs[1].y * m2.vs[1].y + m1.vs[2].y * m2.vs[1].z;
-    auto m23 = m1.vs[0].y * m2.vs[2].x + m1.vs[1].y * m2.vs[2].y + m1.vs[2].y * m2.vs[2].z;
-    auto m31 = m1.vs[0].z * m2.vs[0].x + m1.vs[1].z * m2.vs[0].y + m1.vs[2].z * m2.vs[0].z;
-    auto m32 = m1.vs[0].z * m2.vs[1].x + m1.vs[1].z * m2.vs[1].y + m1.vs[2].z * m2.vs[1].z;
-    auto m33 = m1.vs[0].z * m2.vs[2].x + m1.vs[1].z * m2.vs[2].y + m1.vs[2].z * m2.vs[2].z;
-
-    return Matrix33{{{.x = m11, .y = m21, .z = m31}, {.x = m12, .y = m22, .z = m32}, {.x = m13, .y = m23, .z = m33}}};
-#else
     auto x0 = m2.vs[0].x * m1.vs[0].x + m2.vs[1].x * m1.vs[0].y + m2.vs[2].x * m1.vs[0].z;
     auto y0 = m2.vs[0].y * m1.vs[0].x + m2.vs[1].y * m1.vs[0].y + m2.vs[2].y * m1.vs[0].z;
     auto z0 = m2.vs[0].z * m1.vs[0].x + m2.vs[1].z * m1.vs[0].y + m2.vs[2].z * m1.vs[0].z;
@@ -295,7 +162,6 @@ psyqo::Matrix33 psyqo::SoftMath::multiplyMatrix33(const Matrix33 &m1, const Matr
     auto z2 = m2.vs[0].z * m1.vs[2].x + m2.vs[1].z * m1.vs[2].y + m2.vs[2].z * m1.vs[2].z;
 
     return Matrix33{{{.x = x0, .y = y0, .z = z0}, {.x = x1, .y = y1, .z = z1}, {.x = x2, .y = y2, .z = z2}}};
-#endif
 }
 
 void psyqo::SoftMath::scaleMatrix33(Matrix33 *m, psyqo::FixedPoint<> s) {
@@ -310,39 +176,7 @@ void psyqo::SoftMath::scaleMatrix33(Matrix33 *m, psyqo::FixedPoint<> s) {
     m->vs[2].z = m->vs[2].z * s;
 }
 
-#include <common/syscalls/syscalls.h>
-
 void psyqo::SoftMath::matrixVecMul3(const Matrix33 &m, const Vec3 &v, Vec3 *out) {
-#ifdef COLUMN_MAJOR
-    auto x = v.x;
-    auto y = v.y;
-    auto z = v.z;
-    auto m11 = m.vs[0].x;
-    auto m21 = m.vs[0].y;
-    auto m31 = m.vs[0].z;
-    auto m12 = m.vs[1].x;
-    auto m22 = m.vs[1].y;
-    auto m32 = m.vs[1].z;
-    auto m13 = m.vs[2].x;
-    auto m23 = m.vs[2].y;
-    auto m33 = m.vs[2].z;
-    auto nx1 = m11 * x;
-    auto ny1 = m12 * y;
-    auto nz1 = m13 * z;
-    auto nx2 = m21 * x;
-    auto ny2 = m22 * y;
-    auto nz2 = m23 * z;
-    auto nx3 = m31 * x;
-    auto ny3 = m32 * y;
-    auto nz3 = m33 * z;
-    auto nx = nx1 + ny1 + nz1;
-    auto ny = nx2 + ny2 + nz2;
-    auto nz = nx3 + ny3 + nz3;
-
-    out->x = nx;
-    out->y = ny;
-    out->z = nz;
-#else
     auto x = v.x;
     auto y = v.y;
     auto z = v.z;
@@ -370,7 +204,6 @@ void psyqo::SoftMath::matrixVecMul3(const Matrix33 &m, const Vec3 &v, Vec3 *out)
     out->x = nx;
     out->y = ny;
     out->z = nz;
-#endif
 }
 
 void psyqo::SoftMath::matrixVecMul3xy(const Matrix33 &m, const Vec3 &v, Vec2 *out) {
@@ -529,5 +362,3 @@ void psyqo::SoftMath::project(const Vec3 *v, FixedPoint<> h, Vec2 *out) {
     out->x = x;
     out->y = y;
 }
-
-

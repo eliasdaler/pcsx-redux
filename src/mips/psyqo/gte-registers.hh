@@ -797,19 +797,11 @@ inline void writeUnsafe<Register::ZSF4>(Short z_) {
 
 template <>
 inline void writeSafe<PseudoRegister::Rotation>(const Matrix33& in) {
-#ifdef COLUMN_MAJOR
-    writeUnsafe<Register::R11R12>(Short(in.vs[0].x), Short(in.vs[1].x));
-    writeUnsafe<Register::R13R21>(Short(in.vs[2].x), Short(in.vs[0].y));
-    writeUnsafe<Register::R22R23>(Short(in.vs[1].y), Short(in.vs[2].y));
-    writeUnsafe<Register::R31R32>(Short(in.vs[0].z), Short(in.vs[1].z));
-    writeSafe<Register::R33>(Short(in.vs[2].z));
-#else
     writeUnsafe<Register::R11R12>(Short(in.vs[0].x), Short(in.vs[0].y));
     writeUnsafe<Register::R13R21>(Short(in.vs[0].z), Short(in.vs[1].x));
     writeUnsafe<Register::R22R23>(Short(in.vs[1].y), Short(in.vs[1].z));
     writeUnsafe<Register::R31R32>(Short(in.vs[2].x), Short(in.vs[2].y));
     writeSafe<Register::R33>(Short(in.vs[2].z));
-#endif
 }
 
 template <>
@@ -863,19 +855,11 @@ inline void writeSafe<PseudoRegister::ScreenOffset>(const Vec2& in) {
 
 template <>
 inline void writeUnsafe<PseudoRegister::Rotation>(const Matrix33& in) {
-#ifdef COLUMN_MAJOR
-    writeUnsafe<Register::R11R12>(Short(in.vs[0].x), Short(in.vs[1].x));
-    writeUnsafe<Register::R13R21>(Short(in.vs[2].x), Short(in.vs[0].y));
-    writeUnsafe<Register::R22R23>(Short(in.vs[1].y), Short(in.vs[2].y));
-    writeUnsafe<Register::R31R32>(Short(in.vs[0].z), Short(in.vs[1].z));
-    writeUnsafe<Register::R33>(Short(in.vs[2].z));
-#else
     writeUnsafe<Register::R11R12>(Short(in.vs[0].x), Short(in.vs[0].y));
     writeUnsafe<Register::R13R21>(Short(in.vs[0].z), Short(in.vs[1].x));
     writeUnsafe<Register::R22R23>(Short(in.vs[1].y), Short(in.vs[1].z));
     writeUnsafe<Register::R31R32>(Short(in.vs[2].x), Short(in.vs[2].y));
     writeUnsafe<Register::R33>(Short(in.vs[2].z));
-#endif
 }
 
 template <>
